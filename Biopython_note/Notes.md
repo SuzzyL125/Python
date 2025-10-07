@@ -93,7 +93,7 @@ def naive(P, T):
         if match:
             occurrences.append(i)
     return occurrences
-
+```
 ⚙️ Computational Complexity
 
 Let:
@@ -137,7 +137,58 @@ Typical	Most comparisons close to the minimum in real data	Much closer to best c
 🧩 Summary
 
 The naive exact matching algorithm tests every possible alignment between a pattern and a text.
-
 Despite its simplicity, it provides the foundation for more advanced pattern matching and read alignment algorithms used in genomics.
-
 In most real cases, the algorithm performs closer to the best-case scenario rather than the worst-case.
+
+
+How many character comparisons occur when matching P = AAA to T = AAATAA?
+Given:
+Pattern P = "AAA" (length x = 3)
+Text T = "AAATAA" (length y = 6)
+
+1️⃣ Number of possible alignments
+We can align P against T at:
+y−x+1=6−3+1=4
+
+So offsets = 0, 1, 2, 3
+
+2️⃣ Check each alignment
+Offset 0
+T: AAATAA
+P: AAA
+   ↑↑×        (compare 3 chars)
+
+A==A ✅
+A==A ✅
+A==T ❌
+→ 2 matches + 1 mismatch = 3 comparisons
+
+Offset 1
+T: AAATAA
+    AAA
+    ↑↑×
+
+A==A ✅
+A==A ✅
+A==A ✅
+→ 3 comparisons (full match)
+
+Offset 2
+T: AAATAA
+     AAA
+     ↑×
+
+A==A ✅
+A==T ❌
+→ 2 comparisons
+
+Offset 3
+T: AAATAA
+      AAA
+      ↑↑×
+
+T==A ❌
+→ 1 comparison
+
+3️⃣ Total number of character comparisons
+3+3+2+1=9
