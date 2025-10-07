@@ -43,6 +43,7 @@ This allows each quality score to be represented by a single printable character
 def QtoPhred33(Q):
     """Turn Q into Phred+33 ASCII-encoded quality"""
     return chr(Q + 33)
+```
 Converts an integer quality score (Q) into its ASCII character form.
 chr() converts an integer to its ASCII character.
 Example:
@@ -52,7 +53,7 @@ Q = 40 → 40 + 33 = 73 → chr(73) → 'I'
 def phred33ToQ(qual):
     """Turn Phred+33 ASCII-encoded quality into Q"""
     return ord(qual) - 33
-
+```
 Converts a Phred+33 encoded character back to its integer quality score.
 ord() converts a character to its ASCII integer value.
 Example:
