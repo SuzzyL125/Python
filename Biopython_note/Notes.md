@@ -19,3 +19,124 @@ Here:
 - `@SEQ_ID` is the identifier of the sequence read.  
 - `GATTACA` is the nucleotide sequence.  
 - `IIIIIII` represents the quality scores, where each “I” encodes a high Phred score (indicating high confidence).
+
+
+## 🧬 Base Qualities in FASTQ Files
+
+In FASTQ files, **base quality scores** represent the confidence that a base (A, T, G, or C) has been correctly identified by the sequencing machine.  
+These scores are typically encoded using the **Phred+33** ASCII scheme.
+
+### 🔢 ASCII Encoding: "Phred+33"
+
+To store quality scores efficiently as text:
+1. Take the Phred quality score **Q** (an integer).
+2. Add **33** to it.
+3. Convert the resulting number into its corresponding **ASCII character**.
+
+This allows each quality score to be represented by a single printable character in the FASTQ file.
+
+---
+
+### 🧩 Python Functions for Conversion
+
+```python
+def QtoPhred33(Q):
+    """Turn Q into Phred+33 ASCII-encoded quality"""
+    return chr(Q + 33)
+Converts an integer quality score (Q) into its ASCII character form.
+chr() converts an integer to its ASCII character.
+Example:
+Q = 40 → 40 + 33 = 73 → chr(73) → 'I'
+
+```python
+def phred33ToQ(qual):
+    """Turn Phred+33 ASCII-encoded quality into Q"""
+    return ord(qual) - 33
+
+Converts a Phred+33 encoded character back to its integer quality score.
+ord() converts a character to its ASCII integer value.
+Example:
+qual = 'I' → ord('I') = 73 → 73 - 33 = 40
+
+Summary
+
+Phred score (Q) indicates sequencing accuracy.
+
+Phred+33 encoding allows quality values to be stored compactly as ASCII text.
+
+chr() and ord() are inverse functions that translate between integers and characters.
+
+### 🧮 Naive Exact Matching Algorithm
+We compare `P` to every possible substring of `T` of the same length.
+
+**Algorithm Steps:**
+1. For each possible alignment (offset) of `P` in `T`:
+   - Compare each character in `P` with the corresponding character in `T`.
+2. If all characters match → record this offset as a **match**.
+3. If any mismatch occurs → move to the next alignment.
+
+This is known as the **naive exact matching** approach.
+
+---
+
+### 🧰 Python Implementation Outline
+```python
+def naive(P, T):
+    occurrences = []
+    for i in range(len(T) - len(P) + 1):  # all possible alignments
+        match = True
+        for j in range(len(P)):           # compare characters
+            if T[i + j] != P[j]:
+                match = False
+                break
+        if match:
+            occurrences.append(i)
+    return occurrences
+
+⚙️ Computational Complexity
+
+Let:
+
+x = length(P)
+
+y = length(T)
+
+Number of alignments:
+y - x + 1
+
+Worst-case character comparisons:
+x * (y - x + 1)
+Occurs when every character matches (i.e., pattern perfectly aligns everywhere).
+
+Best-case character comparisons:
+y - x + 1
+Occurs when the first character mismatches at every alignment.
+
+💡 Examples
+
+Worst case: pattern and text share identical or repetitive characters → every alignment requires full comparison.
+
+Best case: pattern starts with a letter not present in the text → immediate mismatch each time.
+
+Example text:
+
+P = "word"
+T = "there would have been a time for such a word"
+
+
+→ Total comparisons: 46
+(40 mismatches + 6 matches)
+
+📈 Key Insights
+Case	Description	Comparisons
+Best	First character mismatches each time	y - x + 1
+Worst	Every character matches	x * (y - x + 1)
+Typical	Most comparisons close to the minimum in real data	Much closer to best case
+
+🧩 Summary
+
+The naive exact matching algorithm tests every possible alignment between a pattern and a text.
+
+Despite its simplicity, it provides the foundation for more advanced pattern matching and read alignment algorithms used in genomics.
+
+In most real cases, the algorithm performs closer to the best-case scenario rather than the worst-case.
