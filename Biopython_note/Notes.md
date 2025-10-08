@@ -310,7 +310,7 @@ x×(y−x+1)
   3. Compare again → match `GCG` (**good suffix Rule**) → DNA after GCG, C mismatch G in pattern
   4. if using **Bad Character Rule**, no alignment will be skipped, thus we use **good suffix Rule** to skip 2 alignments (use the maximum)
      - `GTTATAGCTGATCGCGGCGTAGCGGCG`
-     - '          GTAGCGGCG        '
+     - `          GTAGCGGCG        `
   5. `'GCGGCG'` → match (nect DNA text `'C'` mismatch)
   6.if using **Bad Character Rule**, 2 alignment will be skipped, thus we use **good suffix Rule** to skip 7 alignments (use the maximum)
      - `GTTATAGCTGATCGCGGCGTAGCGGCG`
