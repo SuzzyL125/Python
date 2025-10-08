@@ -99,6 +99,9 @@ print("Leftmost occurrence (offset):", min(matches))
 ```
 
 🧪 Question 7 — Detecting a Poor Sequencing Cycle in a FASTQ File
+
+Data:  https://d28rh4a8wq0iu5.cloudfront.net/ads1/data/ERR037900_1.first1000.fastq
+
 ```
 seqs, quals = readFastq('ERR037900_1.first1000.fastq')
 
