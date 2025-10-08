@@ -125,7 +125,10 @@ Phred+33 encoding allows quality values to be stored compactly as ASCII text.
 
 chr() and ord() are inverse functions that translate between integers and characters.
 
+---
+
 ### 🧮 Naive Exact Matching Algorithm
+
 We compare `P` to every possible substring of `T` of the same length.
 
 **Algorithm Steps:**
@@ -261,8 +264,9 @@ y−x+1 (only one comparison per alignment — immediate mismatch)
 ✅ Maximum possible number of comparisons:
 x×(y−x+1)
 
+
 ## Boyer-Moore Basics
-## Difference Between Naive and Boyer-Moore String Matching
+### Difference Between Naive and Boyer-Moore String Matching
 
 
 ---
@@ -306,7 +310,7 @@ x×(y−x+1)
   3. Compare again → match `GCG` (**good suffix Rule**) → DNA after GCG, C mismatch G in pattern
   4. if using **Bad Character Rule**, no alignment will be skipped, thus we use **good suffix Rule** to skip 2 alignments (use the maximum)
      - `GTTATAGCTGATCGCGGCGTAGCGGCG`
-     -           `GTAGCGGCG`
+     - '          GTAGCGGCG        '
   5. `'GCGGCG'` → match (nect DNA text `'C'` mismatch)
   6.if using **Bad Character Rule**, 2 alignment will be skipped, thus we use **good suffix Rule** to skip 7 alignments (use the maximum)
      - `GTTATAGCTGATCGCGGCGTAGCGGCG`
