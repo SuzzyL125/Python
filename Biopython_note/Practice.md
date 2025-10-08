@@ -35,6 +35,9 @@ def readGenome(filename):
     genome = ''
     with open(filename,'r') as f:
         for line in f:
+            if not line[0] == '>':
+                genome += line.rstrip()
+    return genome
 ```
 
 Questions
@@ -60,6 +63,7 @@ print("Q4: leftmost AGTCGA or RC offset =", min(occ4))
 ```
 
 🧬 Question 5 & 6 — Approximate Matching (≤2 mismatches)
+
 🔹 Step 1. Define naive_2mm function
 ```
 def naive_2mm(p, t):
@@ -132,6 +136,4 @@ plt.ylabel('Average quality score')
 plt.title('Average read quality by sequencing cycle')
 plt.show()
 ```
-            if not line[0] == '>':
-                genome += line.rstrip()
-    return genome
+ 
