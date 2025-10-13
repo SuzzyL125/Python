@@ -125,6 +125,47 @@ Phred+33 encoding allows quality values to be stored compactly as ASCII text.
 
 chr() and ord() are inverse functions that translate between integers and characters.
 
+
+---
+
+### 🧮 Approximate Matching
+
+```mermaid
+flowchart TD
+
+A[DNA Sequence Matching Algorithms] --> B1[Offline Algorithms]
+A --> B2[Online Algorithms]
+
+%% Offline branch
+B1 --> C1[Index-Assisted Methods]
+
+C1 --> D1[k-mer Index]
+C1 --> D2[Subsequence Index]
+C1 --> D3[Suffix Index]
+
+%% Online branch
+B2 --> C2[Naive Exact Matching]
+C2 --> C3[Boyer-Moore Algorithm]
+```
+---
+
+### 🧭 Explanation
+- **Offline algorithms**  
+  - Preprocess the DNA sequence **before** searching (build an index).  
+  - Include:
+    - **k-mer index**: stores all k-length substrings.
+    - **Subsequence index**: stores sampled k-mers (skipping positions).
+    - **Suffix index**: stores all suffixes of the DNA sequence.
+
+- **Online algorithms**  
+  - Search the pattern **directly** without pre-built index.  
+  - Include:
+    - **Naive exact matching**: checks every possible position.
+    - **Boyer-Moore**: skips unnecessary comparisons using preprocessing of the pattern.
+
+---
+
+
 ---
 
 ### 🧮 Naive Exact Matching Algorithm
@@ -326,5 +367,110 @@ x×(y−x+1)
 | Shift strategy | Move 1 position at a time | Jump multiple positions using rules |
 | Time efficiency | Slow in worst-case | Fast on average, especially for long text |
 | Implementation difficulty | Simple | More complex |
+
+---
+
+
+# DNA String Matching Concepts
+
+---
+
+## 1. Preprocessing: Offline vs Online
+
+### **Offline Preprocessing**
+- **Definition**: The reference DNA (e.g., genome) is processed **before** any query search begins.
+- **Goal**: Build an **index** or data structure that allows **fast matching later**.
+- **Example**:
+  - Construct a **suffix array**, **suffix tree**, or **k-mer index** for the genome.
+  - This index is reused for multiple queries.
+
+✅ **Advantages**:
+- Faster searches once the index is built.
+- Ideal for large static DNA databases (e.g., human genome).
+
+❌ **Disadvantages**:
+- High preprocessing time and memory.
+- Not ideal when the DNA data changes frequently.
+
+---
+
+### **Online Processing**
+- **Definition**: Searching occurs **directly** on the DNA sequence without prior indexing.
+- **Goal**: Start searching as soon as the pattern (query) is given.
+
+✅ **Advantages**:
+- No preprocessing required.
+- Works for dynamic or small DNA sequences.
+- Naive Match
+  
+❌ **Disadvantages**:
+- Slower search for large genomes.
+- Each query requires scanning the sequence again.
+
+---
+
+## 2. DNA Indexing and k-mer
+
+### **DNA Indexing**
+- **Definition**: Creating a data structure that allows **quick access** to positions of subsequences in the genome.
+- **Common Index Types**:
+  - **Suffix Array**: Sorted list of all suffixes of the DNA.
+  - **FM-index / BWT (Burrows–Wheeler Transform)**: Compressed index used in tools like `Bowtie` or `BWA`.
+  - **Hash-based Index**: Uses a hash table to map short DNA subsequences (k-mers) to their positions.
+
+---
+
+### **k-mer**
+- **Definition**: A substring of length *k* extracted from a DNA sequence.
+- **Example**:  
+  For `GATTACA`, 3-mers are:  
+  `GAT`, `ATT`, `TTA`, `TAC`, `ACA`
+
+- **Usage**:
+  - Build hash tables or indexes (store each k-mer and its position).
+  - Compare overlapping k-mers to find matching regions between sequences.
+
+✅ **Advantages**:
+- Fast approximate matching.
+- Used in genome assembly and alignment algorithms.
+
+---
+
+## 3. Bisection (Binary Search) in DNA Indexing
+
+- **Definition**: A **divide-and-conquer** search strategy that repeatedly halves the search space.
+- **Usage**:
+  - Applied on **sorted data structures** like suffix arrays or sorted k-mer lists.
+  - Allows finding a DNA pattern’s location efficiently.
+
+### **Example**
+If suffix array = `[0, 2, 4, 6, 8]` and you search `"TAC"`:
+- Compare with middle suffix → decide if `"TAC"` is alphabetically before or after.
+- Halve the search space each time.
+- **Time Complexity**: `O(log n)` comparisons after preprocessing.
+
+---
+
+## 4. Hash Functions in DNA Matching
+
+- **Definition**: A **mathematical function** that converts a DNA substring into a numeric key.
+- **Purpose**: Enables quick lookup in hash tables.
+
+### **Example**
+If `A=0, C=1, G=2, T=3`, then:
+- DNA `ACG` → Hash = `0×4² + 1×4¹ + 2×4⁰ = 6`
+- Store `(hash, position)` in a hash table.
+
+- **Usage**:
+  - Efficiently compare many DNA k-mers.
+  - Used in algorithms like **Rabin–Karp** for DNA pattern matching.
+
+✅ **Advantages**:
+- Fast lookup and comparison.
+- Works well with large DNA sequences.
+
+❌ **Disadvantages**:
+- Risk of **hash collisions** (different sequences with same hash).
+- Requires recomputation or rolling hash techniques for long sequences.
 
 ---
