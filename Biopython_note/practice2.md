@@ -1,7 +1,11 @@
 
+t = readGenome('chr1.GRCh38.excerpt (1).fasta')
+p = 'GGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGG'
+
 ```
 # ---- 1&2: How many alignments does the naive exact matching 
 # algorithm try when matching the string GGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGG
+
 def naive_with_counts(p, t):
     occurrences = []
     alignments = 0
@@ -24,13 +28,14 @@ print("Naive comparisons:", comparisons)
 print("Match positions:", occurrences)
 ```
 ---
-Naive alignments: 799954
-Naive comparisons: 984143
-Match positions: [56922]
+- Naive alignments: 799954
+- Naive comparisons: 984143
+- Match positions: [56922]
 ---
 
 ```
 # ---- 3: How many alignments does Boyer-Moore try when matching the string
+
 p_bm = BoyerMoore(p) #from bm_preproc.py
 
 def boyer_moore_with_counts(p, p_bm, t):
@@ -61,8 +66,8 @@ print("Match positions (BM):", occurrences_bm)
 ```
 
 ---
-Boyer-Moore alignments: 127974
-Match positions (BM): [56922]
+- Boyer-Moore alignments: 127974
+- Match positions (BM): [56922]
 ---
 
 ```
@@ -116,7 +121,7 @@ def verify_candidates(p, t, candidate_positions, n):
 
 k = 8
 index = Index(t, k)
-
+p = 'GGCGCGGTGGCTCACGCCTGTAAT'
 total_hits, per_seg, candidates = pigeonhole_index_hit_counts(p, t, 2, index)
 print("Per-segment index hit counts (segments 0..2):", per_seg)
 print("Total index hits (sum over segments):", total_hits)
@@ -130,9 +135,9 @@ print("Positions:", matches)
 ```
 
 ---
-Per-segment index hit counts (segments 0..2): [13, 17, 60]
-Total index hits (sum over segments): 90
-Total raw candidate positions (with duplicates): 90
-Verified approximate matches (<=2 mismatches), unique positions: 19
-Positions: [56922, 84641, 147558, 160162, 160729, 191452, 262042, 273669, 364263, 421221, 429299, 465647, 551134, 635931, 657496, 681737, 717706, 724927, 747359]
+- Per-segment index hit counts (segments 0..2): [13, 17, 60]
+- Total index hits (sum over segments): 90
+- Total raw candidate positions (with duplicates): 90
+- Verified approximate matches (<=2 mismatches), unique positions: 19
+- Positions: [56922, 84641, 147558, 160162, 160729, 191452, 262042, 273669, 364263, 421221, 429299, 465647, 551134, 635931, 657496, 681737, 717706, 724927, 747359]
 ---
