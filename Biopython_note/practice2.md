@@ -1,6 +1,7 @@
+
+```
 # ---- 1&2: How many alignments does the naive exact matching 
 # algorithm try when matching the string GGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGG
-```
 def naive_with_counts(p, t):
     occurrences = []
     alignments = 0
