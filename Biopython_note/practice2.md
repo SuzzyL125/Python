@@ -1,6 +1,9 @@
-
+---
+Data source:http://d28rh4a8wq0iu5.cloudfront.net/ads1/data/chr1.GRCh38.excerpt.fasta
+```
 t = readGenome('chr1.GRCh38.excerpt (1).fasta')
 p = 'GGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGG'
+```
 
 ```
 # ---- 1&2: How many alignments does the naive exact matching 
