@@ -474,3 +474,144 @@ If `A=0, C=1, G=2, T=3`, then:
 - Requires recomputation or rolling hash techniques for long sequences.
 
 ---
+
+🧬 Approximate DNA Sequence Matching with the Pigeonhole Principle
+📘 Concept Overview
+
+The Pigeonhole Principle is a simple but powerful idea used in approximate string matching (where mismatches or errors are allowed).
+It states that if a sequence of length m is divided into n+1 parts, and if we allow up to n mismatches, at least one part must match exactly in the correct alignment.
+
+🧠 How It Works
+
+1. Suppose we want to find pattern P of length m in DNA sequence T, allowing up to n mismatches (errors).
+2. We split P into n+1 segments (pigeonholes).
+3. Since only n mismatches are allowed, at least one segment must match exactly in T.
+4. We first perform exact matching for each segment (using index-assisted or online methods).
+5. Then, for each match, we verify the surrounding region to check if the total mismatches ≤ n.
+
+🧩 Example
+
+- For pattern P = GATTACA, length = 7, and allowed mismatches = 2:
+- Divide into n+1 = 3 parts → GAT | TAC | A
+- Search each part exactly in T using an index (e.g., k-mer or suffix index).
+- Verify nearby regions to ensure ≤ 2 mismatches in the full alignment.
+
+
+🧬 Edit Distance and Hamming Distance Explained
+🔹 What is Edit Distance?
+
+Edit distance (also called Levenshtein distance) measures how different two strings are, based on the minimum number of single-character operations required to change one string into another.
+These operations are:
+
+Insertion — Add a character
+Deletion — Remove a character
+Substitution — Replace one character with another
+
+✳️ Example
+String X = "GATTACA"
+String Y = "GCATGCU"
+
+
+One possible way to transform X → Y:
+
+Substitute T → C (GATTACA → GACTACA)
+Insert G after A (GACTACA → GACTGCA)
+Substitute A → U (GACTGCA → GACTGCU)
+
+✅ Edit distance = 3
+
+
+🔹 What is Hamming Distance?
+
+Hamming distance only counts substitutions (not insertions or deletions), and is defined only for strings of equal length.
+
+✳️ Example
+String X = "GATTACA"
+String Y = "GACTATA"
+
+
+Positions differing: 3rd (T≠C) and 6th (C≠T)
+✅ Hamming distance = 2
+
+🔹 Relationship Between Edit Distance and Hamming Distance
+
+If strings X and Y are the same length, then:
+
+🧠 Edit distance ≤ Hamming distance
+
+But actually, when only substitutions are needed (no insertions/deletions), the two distances are equal.
+
+
+✳️ Example
+X = "ACTG"
+Y = "ACGG"
+
+Only one substitution (T → G)
+Edit distance = 1
+Hamming distance = 1
+
+🔹 Edit Distance with Empty String
+
+If one string is empty (say "") and the other has length n, we need n insertions (or deletions) to convert one into the other.
+
+✳️ Example
+X = ""  
+Y = "ACT"
+→ Need to insert A, C, T → 3 operations
+✅ Edit distance = 3
+
+
+🔹 Dynamic Programming to Compute Edit Distance
+
+We can compute edit distance efficiently using Dynamic Programming (DP).
+
+🧩 Idea
+
+Let dp[i][j] = minimum edit distance between the first i characters of X and the first j characters of Y.
+
+Then the recurrence is:
+
+dp[i][0] = i        # delete all i chars
+dp[0][j] = j        # insert all j chars
+
+if X[i-1] == Y[j-1]:
+    dp[i][j] = dp[i-1][j-1]
+else:
+    dp[i][j] = 1 + min(
+        dp[i-1][j],     # deletion
+        dp[i][j-1],     # insertion
+        dp[i-1][j-1]    # substitution
+    )
+
+🧠 Example Code (Python)
+def edit_distance(X, Y):
+    m, n = len(X), len(Y)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+    for i in range(m + 1):
+        dp[i][0] = i
+    for j in range(n + 1):
+        dp[0][j] = j
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if X[i - 1] == Y[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1]
+            else:
+                dp[i][j] = 1 + min(
+                    dp[i - 1][j],     # deletion
+                    dp[i][j - 1],     # insertion
+                    dp[i - 1][j - 1]  # substitution
+                )
+    return dp[m][n]
+
+✳️ Example Run
+edit_distance("GATTACA", "GCATGCU")
+# Output: 3
+
+🧾 Summary Table
+Concept	Definition	Allowed Operations	Strings of Equal Length?	Example Result
+Edit Distance	Minimum number of edits (insert, delete, substitute) to convert X → Y	✔️ Insertion, Deletion, Substitution	❌ No restriction	GATTACA → GCATGCU → 3
+Hamming Distance	Number of mismatched characters	❌ Substitution only	✔️ Required	ACTG → ACGG → 1
+Relation (equal-length)	Edit distance = Hamming distance	-	✔️ Yes	✅ Equal
+Empty vs. 3-length string				✅ 3
