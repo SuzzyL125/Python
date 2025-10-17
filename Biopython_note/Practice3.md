@@ -1,3 +1,5 @@
+resources:https://nbviewer.org/github/BenLangmead/ads1-hw-examples/blob/master/hw3_overlap_all.ipynb
+
 ## Edit distance between pattern and excerpt of human chromosome1
 ```
 def editDistanceMatch(p, t):
