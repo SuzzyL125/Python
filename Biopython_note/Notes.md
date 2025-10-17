@@ -498,9 +498,9 @@ It states that if a sequence of length m is divided into n+1 parts, and if we al
 
 
 🧬 Edit Distance and Hamming Distance Explained
-🔹 What is Edit Distance?
+🔹 Edit Distance
 
-Edit distance (also called Levenshtein distance) measures how different two strings are, based on the minimum number of single-character operations required to change one string into another.
+**Edit distance** (also called Levenshtein distance) measures how different two strings are, based on the minimum number of single-character operations required to change one string into another.
 These operations are:
 
 Insertion — Add a character
@@ -521,9 +521,10 @@ Substitute A → U (GACTGCA → GACTGCU)
 ✅ Edit distance = 3
 
 
-🔹 What is Hamming Distance?
+---
+🔹 Hamming Distance
 
-Hamming distance only counts substitutions (not insertions or deletions), and is defined only for strings of equal length.
+**Hamming distance** only counts **substitutions** (not insertions or deletions), and is defined only for strings of equal length.
 
 ✳️ Example
 String X = "GATTACA"
@@ -607,11 +608,76 @@ def edit_distance(X, Y):
 
 ✳️ Example Run
 edit_distance("GATTACA", "GCATGCU")
-# Output: 3
+Output: 3
 
-🧾 Summary Table
-Concept	Definition	Allowed Operations	Strings of Equal Length?	Example Result
-Edit Distance	Minimum number of edits (insert, delete, substitute) to convert X → Y	✔️ Insertion, Deletion, Substitution	❌ No restriction	GATTACA → GCATGCU → 3
-Hamming Distance	Number of mismatched characters	❌ Substitution only	✔️ Required	ACTG → ACGG → 1
-Relation (equal-length)	Edit distance = Hamming distance	-	✔️ Yes	✅ Equal
-Empty vs. 3-length string				✅ 3
+---
+🧬 Global Alignment for DNA Sequences
+
+In DNA sequence analysis, global alignment is used when we want to compare two sequences over their entire lengths — aligning every nucleotide **from start to end**.
+
+This is crucial when:
+
+- The two sequences are homologous (e.g., same gene from two species, same chromosome region).
+- You want to measure overall similarity, including all insertions, deletions, and substitutions.
+- You want to find evolutionary relationships or mutation patterns between two complete sequences.
+
+In contrast:
+- **Local alignment** (e.g., Smith–Waterman algorithm) focuses only on finding best-matching subsections, ignoring unrelated regions — useful for finding motifs, exons, or functional domains.
+
+---
+🧬 Finding the Longest Exact Overlap (Suffix/Prefix Match)
+
+When assembling DNA sequences from short reads, we often need to check how well the end (suffix) of one read matches the beginning (prefix) of another.
+This helps us merge reads that likely come from adjacent regions of the genome.
+
+Example
+```
+Read A = "TTACGT"
+Read B = "CGTAAA"
+```
+✅ The longest overlap is length 3, because "CGT" is both the **suffix** of A and **prefix** of B.
+
+
+---
+
+🧬🧬🧬 Markdown Summary of Key Concepts
+
+1. Edit Distance and Traceback
+
+Edit distance measures how dissimilar two strings are, based on insertions, deletions, and substitutions.
+Dynamic programming (DP) is used to compute this efficiently.
+Once the DP table is filled, traceback reconstructs the optimal alignment path:
+
+↖ Diagonal → match/substitution
+↑ Up → deletion
+← Left → insertion
+
+2. Global vs Local Alignment
+Type	Goal	Algorithm	Example Use
+Global Alignment	Align full sequences end-to-end	Needleman–Wunsch	Comparing homologous genes
+Local Alignment	Find best matching regions (substrings)	Smith–Waterman	Finding motifs or conserved domains
+
+4. Dynamic Programming Matrix
+
+Size = |P| × |T|
+Each cell [i][j] represents the edit distance between prefix P[:i] and T[:j].
+The smallest value in the bottom row gives the best approximate match.
+
+4. Overlap–Layout–Consensus (OLC) Assembly
+
+Goal: reconstruct genome from short reads.
+First Law of Assembly: If a suffix of one read ≈ prefix of another → they might overlap in the genome.
+Second Law of Assembly: Higher coverage → more and longer overlaps → better assembly.
+
+5. Overlap Graph
+
+Nodes: reads
+Edges: overlaps between reads
+Genome reconstruction: corresponds to a path through this graph.
+Helps visualize how reads connect and overlap.
+
+6. Reasons for Non-Exact Overlaps
+
+Sequencing errors – misread bases.
+Polyploidy – multiple genome copies may differ slightly.
+Insufficient coverage – not a cause of mismatches (just missing data).
